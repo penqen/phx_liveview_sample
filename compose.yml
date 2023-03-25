@@ -1,0 +1,40 @@
+version: '3'
+services:
+  db:
+    image: mysql:8-debian
+    platform: linux/amd64
+    ports:
+      - "13306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_DATABASE: todos_dev
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    restart: always
+
+  phx:
+    build:
+      context: .
+      dockerfile: ./platforms/Dockerfile
+      target: dev
+    restart: always
+    command: >
+      sh -c "
+        mix do deps.get, ecto.setup &&
+        mix phx.server
+      "
+    expose:
+      - "4000"
+    ports:
+      - "127.0.0.1:4000:4000"
+    volumes:
+      - ./services/todos:/app
+    environment:
+      DATABASE_URL: >
+        ecto://user:password@db:3306/todos_dev?timeout=1000&pool_size=10&stacktrace=true
+    working_dir: /app
+    depends_on:
+      - db
+
+volumes:
+  {}

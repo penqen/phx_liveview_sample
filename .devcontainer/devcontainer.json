@@ -1,0 +1,14 @@
+{
+  "dockerComposeFile": ["../compose.yml", "compose.yml"],
+  "service": "phx",
+	"workspaceFolder": "/app",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"mjmcloug.vscode-elixir",
+				"ritvyk.heex-html",
+				"phoenixframework.phoenix"
+			]
+		}
+	}
+}
